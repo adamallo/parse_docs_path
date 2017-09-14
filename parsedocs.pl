@@ -64,15 +64,15 @@ for (my $i=0; $i<$nfiles; ++$i)
 	$file=~s/ /\\ /g;
 	#$filename=fileparse("$file",@suffixes);
 	chomp($file);
-	$content=`textutil -stdout -convert txt $file`;
-	#$content=`java.exe -jar tika-app-1.15.jar -t $file` ##windows cygwin
+    #$content=`textutil -stdout -convert txt $file`;
+	$content=`java.exe -jar tika-app-1.15.jar -t $file` ##windows cygwin
 	$content=~s/\n/ /msg;
 	$ncases=()=$content=~m/Case/msig; ##Matches in list context to get the different matches and then scalar context to get the amount of them we have
 	$nhistories=()=$content=~m/HISTORY/msig;
 	#@parsed=$content=~m/^.*Case\ No\.:\t[^\s]*.*? HISTORY.*?CLINICAL/msg;
 	
-	@parsed=$content=~m/Case\ No\.:\t[^\s]*.*? HISTORY.*?CLINICAL/msg;
-	#@parsed=$content=~m/Case\ No\.:[\t\s][^\s]*.*? HISTORY.*?CLINICAL/msg; #Windows
+    #@parsed=$content=~m/Case\ No\.:\t[^\s]*.*? HISTORY.*?CLINICAL/msg;
+	@parsed=$content=~m/Case\ No\.:[\t\s][^\s]*.*? HISTORY.*?CLINICAL/msg; #Windows
 	$nparsed=scalar @parsed;
 	#$nsubs=$content=~s/^.*Case\ No\.:\t([^\s]*).* HISTORY(.*)CLINICAL.*$/$1\n$2/ms;
 
@@ -96,8 +96,8 @@ for (my $i=0; $i<$nfiles; ++$i)
 		}
 		for my $match (@parsed)
 		{
-			$match=~s/Case\ No\.:\t([^\s]*).* HISTORY(.*)CLINICAL/$1\n$2/ms;	
-#			$match=~s/Case\ No\.:[\t\s]([^\s]*).* HISTORY(.*)CLINICAL/$1\n$2/ms; #Windows
+#			$match=~s/Case\ No\.:\t([^\s]*).* HISTORY(.*)CLINICAL/$1\n$2/ms;	
+			$match=~s/Case\ No\.:[\t\s]([^\s]*).* HISTORY(.*)CLINICAL/$1\n$2/ms; #Windows
 
 			($id,$match)=split("\n",$match);
 			$match=~s/\t/    /g;
